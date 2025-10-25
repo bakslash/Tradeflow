@@ -3,6 +3,8 @@ name: 🧪 Test Microservices
 on:
   pull_request:
     branches: [ develop, main ]
+  push:
+    branches: [ develop ]
 
 jobs:
   test:
