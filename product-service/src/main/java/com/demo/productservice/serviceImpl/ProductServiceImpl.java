@@ -5,49 +5,48 @@ import com.demo.productservice.entity.Product;
 import com.demo.productservice.mapper.ProductMapper;
 import com.demo.productservice.repository.ProductRepository;
 import com.demo.productservice.service.ProductService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.demo.productservice.mapper.ProductMapper.mapToProductDto;
-
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
     private static final Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
-
     private final ProductRepository productRepository;
 
     /**
-     * Creates a new product and saves it to the database.
+     * Creates and saves a new product in the database.
      *
-     * @param productDto The DTO containing the product details.
-     * @return The saved product as a DTO.
+     * @param productDto Product details to create.
+     * @return Created ProductDto.
      */
     @Override
     public ProductDto createProduct(ProductDto productDto) {
-        logger.info("[createProduct] Attempting to create product: {}", productDto.getName());
+        logger.info("[ProductService] Creating product: {}", productDto.getName());
 
         Product product = ProductMapper.mapToProduct(productDto);
         Product savedProduct = productRepository.save(product);
 
-        logger.info("[createProduct] Product created successfully with ID: {}", savedProduct.getId());
-        return mapToProductDto(savedProduct);
+        logger.info("[ProductService] Product created successfully with ID: {}", savedProduct.getId());
+        return ProductMapper.mapToProductDto(savedProduct);
     }
 
     /**
      * Fetches all products from the database.
      *
-     * @return List of ProductDto objects.
+     * @return List of ProductDto.
      */
     @Override
     public List<ProductDto> getProducts() {
-        logger.info("[getProducts] Fetching all products...");
-        List<Product> products = productRepository.findAll();
-        return products.stream().map(ProductMapper::mapToProductDto).toList();
+        logger.info("[ProductService] Fetching all products...");
+        return productRepository.findAll()
+                .stream()
+                .map(ProductMapper::mapToProductDto)
+                .toList();
     }
 }
