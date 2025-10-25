@@ -21,8 +21,9 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+      # 👇 Run Maven from the directory containing the parent pom.xml
       - name: 🔨 Build all modules
-        run: mvn clean package -DskipTests
+        run: mvn -f pom.xml clean package -DskipTests
 
       - name: 📦 Upload build artifacts
         uses: actions/upload-artifact@v4
