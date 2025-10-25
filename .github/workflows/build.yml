@@ -1,4 +1,4 @@
-name: 🏗️ Build Microservices
+name: 🏗️ Build Product Service
 
 on:
   push:
@@ -21,15 +21,13 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      # 👇 Run Maven from the directory containing the parent pom.xml
-      - name: 🔨 Build all modules
-        run: mvn -f pom.xml clean package -DskipTests
+      # 👇 Move into the product-service directory before running Maven
+      - name: 🔨 Build Product Service
+        working-directory: product-service
+        run: mvn clean package -DskipTests
 
       - name: 📦 Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: tradeflow-build
-          path: |
-            product-service/target/*.jar
-            order-service/target/*.jar
-            inventory-service/target/*.jar
+          name: product-service-build
+          path: product-service/target/*.jar
